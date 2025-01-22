@@ -1,6 +1,7 @@
 # Charger les bibliothèques nécessaires
 library(maxLik)
 library(mvtnorm)
+library(stargazer)
 
 # Charger les données
 data <- readRDS("INTERMEDIATE/transports.rds")
@@ -21,9 +22,10 @@ logLik_joint_city <- function(params, data) {
 
   # Calcul de la variable latente FP_star
   FP_star <- with(data,
-    gamma[1] + gamma[2] * log(NCITIES) +
-    gamma[3] * RIGHT + gamma[4] * TRANS +
-    gamma[5] * AGIR + gamma[6] * KEOLIS +
+    gamma[1] * log(NCITIES) +
+    gamma[2] * RIGHT + gamma[3] * TRANS +
+    gamma[4] * AGIR + gamma[5] * KEOLIS +
+    gamma[6] * PUBLIC +
     beta[1] +
     beta[2] * log_PKO +
     beta[3] * log_PL_PM +
@@ -85,7 +87,8 @@ B_city <- c(-0.01, 0.99, 0.99)
 # Maximisation de la log-vraisemblance avec contraintes linéaires et méthode BFGS
 model <- maxLik(
   logLik = logLik_joint_city, start = init_params_city, data = data,
-  constraints = list(ineqA = A_city, ineqB = B_city), method = "BFGS"
+  constraints = list(ineqA = A_city, ineqB = B_city), method = "BFGS",
+  control = list(iterlim = 2000)
 )
 
 summary(model)

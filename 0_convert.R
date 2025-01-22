@@ -16,7 +16,8 @@ data <- as.data.frame(read_excel(file_path, sheet = 1)) %>%
     LENGHT, PARC, EMPLOY, DRIVERS, PKO, LABOR, COSTS, GASI) %>%
   ## Normalize and log-transform variables
   mutate(
-    PM = GASI,  # Price of materials
+    PM = GASI, #Price of materials
+    Wages = LABOR/EMPLOY,  # Wage rates
     PL_PM = (LABOR / EMPLOY) / PM,  # Wage rate normalized by GASI
     log_COSTS_PM = log(COSTS / PM),   # Log of normalized costs
     log_PKO = log(PKO),               # Log of output
