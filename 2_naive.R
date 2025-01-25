@@ -7,7 +7,6 @@ library(dplyr)      # For data manipulation
 data <- readRDS("INTERMEDIATE/transports.rds")
 
 
-# Model with reparameterization for homogeneity
 translog_model <- plm(
   log_COSTS_PM ~
     log_PKO + log_PL_PM +
@@ -16,9 +15,20 @@ translog_model <- plm(
     TREND +
     INCENT,
   data = data,
-  index = c("CITY_id", "YEAR"),  # Panel data: firm and time
-  model = "pooling"
+  index = "CITY_id",  # Effets fixes uniquement au niveau des villes
+  model = "within"
 )
 
-# Summarize the results
 summary(translog_model)
+
+translog_model_fe <- lm(
+  log_COSTS_PM ~
+    log_PKO + log_PL_PM +
+    I(0.5 * log_PKO^2) + I(0.5 * log_PL_PM^2) +
+    I(log_PKO * log_PL_PM) +
+    TREND + INCENT +
+    factor(CITY_id),  # Effets fixes explicites
+  data = data
+)
+
+summary(translog_model_fe)
