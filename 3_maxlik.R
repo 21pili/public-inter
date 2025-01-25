@@ -1,18 +1,18 @@
 # Charger les bibliothèques nécessaires
 library(maxLik)
 library(mvtnorm)
-library(stargazer)
 
 # Charger les données
 data <- readRDS("INTERMEDIATE/transports.rds")
 
 # Fonction de log-vraisemblance conjointe avec les intercepts spécifiques aux villes
+n_g <- 5
 logLik_joint_city <- function(params, data) {
   # Paramètres
-  gamma <- params[1:6] # Coefficients pour FP_star
-  beta <- params[7:(14 + length(unique(data$CITY)))] # Coefficients pour la fonction de coût
-  sigma <- params[15 + length(unique(data$CITY))] # Écart-type de epsilon
-  rho <- params[16 + length(unique(data$CITY))] # Corrélation entre epsilon et eta
+  gamma <- params[1:n_g] # Coefficients pour FP_star
+  beta <- params[n_g + 1:(n_g + 8 + length(unique(data$CITY)))] # Coefficients pour la fonction de coût
+  sigma <- params[n_g + 9 + length(unique(data$CITY))] # Écart-type de epsilon
+  rho <- params[n_g + 10 + length(unique(data$CITY))] # Corrélation entre epsilon et eta
 
   # Paramètres dérivés
   sigma_eta <- 1 # Variance de eta fixée à 1
@@ -21,19 +21,18 @@ logLik_joint_city <- function(params, data) {
   city_params <- beta[9:(8 + ncol(city_dummies))]
 
   # Calcul de la variable latente FP_star
-  FP_star <- with(data,
-    gamma[1] * log(NCITIES) +
-    gamma[2] * RIGHT + gamma[3] * TRANS +
-    gamma[4] * AGIR + gamma[5] * KEOLIS +
-    gamma[6] * PUBLIC +
-    beta[1] +
-    beta[2] * log_PKO +
-    beta[3] * log_PL_PM +
-    beta[4] * 0.5 * (log_PKO^2) +
-    beta[5] * 0.5 * (log_PL_PM^2) +
-    beta[6] * log_PKO * log_PL_PM +
-    beta[8] * TREND +
-    city_dummies %*% city_params)
+  FP_star <- with(
+    data,
+      gamma[1] * log(NCITIES) +
+      gamma[2] * RIGHT + gamma[3] * TRANS +
+      gamma[4] * AGIR + gamma[5] * KEOLIS +
+      beta[1] +
+      beta[2] * log_PKO +
+      beta[3] * log_PL_PM +
+      beta[4] * 0.5 * (log_PKO^2) +
+      beta[5] * 0.5 * (log_PL_PM^2) +
+      beta[6] * log_PKO * log_PL_PM +
+      beta[8] * TREND)
 
   # Probabilités associées à INCENT
   prob_IN <- pnorm(FP_star) # P(INCENT = 1)
@@ -41,19 +40,21 @@ logLik_joint_city <- function(params, data) {
 
   # Fonction de coût translog complète avec les dummies pour les villes
 
-  predicted_costs <- with(data, 
-    beta[1] +
-    beta[2] * log_PKO +
-    beta[3] * log_PL_PM +
-    beta[4] * (log_PKO^2) +
-    beta[5] * (log_PL_PM^2) +
-    beta[6] * log_PKO * log_PL_PM +
-    beta[7] * INCENT +
-    beta[8] * TREND +
-    city_dummies %*% city_params)
+  predicted_costs <- with(
+    data,
+      beta[1] +
+      beta[2] * log_PKO +
+      beta[3] * log_PL_PM +
+      beta[4] * (log_PKO^2) +
+      beta[5] * (log_PL_PM^2) +
+      beta[6] * log_PKO * log_PL_PM +
+      beta[7] * INCENT +
+      beta[8] * TREND +
+      city_dummies %*% city_params
+  )
 
   # Résidus de la fonction de coût
-  residuals <- log(data$COSTS) - predicted_costs
+  residuals <- data$log_COSTS_PM - predicted_costs
 
   # Densité conjointe : normale bivariée
   joint_density <- dmvnorm(
@@ -71,15 +72,15 @@ logLik_joint_city <- function(params, data) {
 
 # Ajuster les paramètres initiaux pour inclure les dummies de villes
 n_cities <- length(unique(data$CITY))
-init_params_city <- c(rep(0.01, 14 + n_cities), 0.5, 0.05)
-init_params_city <- c(rep(0.01, 14 + n_cities), 0.5, 0.05)
+init_params_city <- c(rep(0.01, n_g + 8 + n_cities), 0.5, 0.05)
+init_params_city <- c(rep(0.01, n_g + 8 + n_cities), 0.5, 0.05)
 
 # Définir les contraintes linéaires
 A_city <- matrix(c(
-  rep(0, 14), rep(0, n_cities), 1, 0, # sigma - 0.01 >= 0
-  rep(0, 14), rep(0, n_cities), 0, 1, # rho + 0.99 >= 0
-  rep(0, 14), rep(0, n_cities), 0, -1 # 0.99 - rho >= 0
-), ncol = 16 + n_cities, byrow = TRUE)
+  rep(0, n_g + 8), rep(0, n_cities), 1, 0, # sigma - 0.01 >= 0
+  rep(0, n_g + 8), rep(0, n_cities), 0, 1, # rho + 0.99 >= 0
+  rep(0, n_g + 8), rep(0, n_cities), 0, -1 # 0.99 - rho >= 0
+), ncol = n_g + 10 + n_cities, byrow = TRUE)
 
 B_city <- c(-0.01, 0.99, 0.99)
 

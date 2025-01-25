@@ -16,8 +16,8 @@ translog_model <- plm(
     TREND +
     INCENT,
   data = data,
-  index = c("CITY_id"),  # Panel data: firm and time
-  model = "within" ## Ou pooling
+  index = c("CITY_id", "YEAR"),  # Panel data: firm and time
+  model = "pooling"
 )
 
 # Summarize the results
