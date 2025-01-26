@@ -1,39 +1,33 @@
 \begin{table}[ht]
 \centering
-\caption{Résumé des résultats de l'estimation des modèles}
+\caption{Endogenous treatment effect model—cost function}
 \label{tab:results}
-\begin{tabular}{lcc}
+\begin{tabular}{llllll}
 \toprule
-\textbf{Variable} & \textbf{Modèle 1} & \textbf{Modèle 2} \\
+\textbf{Variable} & \textbf{FE} & \textbf{ETM1} & \textbf{ETM2} & \textbf{ETM3}\\
 \midrule
-Intercept & -0.0532 & (à remplir) \\
-          & (0.0385) & (à remplir) \\[6pt]
-Variable 1 & 0.0179 & (à remplir) \\
-           & (0.0383) & (à remplir) \\[6pt]
-Variable 2 & 0.2952 & (à remplir) \\
-           & (0.1222) & (à remplir) \\[6pt]
-Variable 3 & -0.4407 & (à remplir) \\
-           & (0.1335) & (à remplir) \\[6pt]
-Variable 4 & -0.0332 & (à remplir) \\
-           & (0.1042) & (à remplir) \\[6pt]
-Variable 5 & 0.2079 & (à remplir) \\
-           & (0.0983) & (à remplir) \\[6pt]
-Variable 6 & 17.9170 & (à remplir) \\
-           & (1.2177) & (à remplir) \\[6pt]
-Variable 7 & -1.6266 & (à remplir) \\
-           & (0.1107) & (à remplir) \\[6pt]
-Variable 8 & -1.9482 & (à remplir) \\
-           & (0.3302) & (à remplir) \\[6pt]
-Variable 9 & 0.0879 & (à remplir) \\
-           & (0.0028) & (à remplir) \\[6pt]
-\vdots     & \vdots & \vdots \\[6pt]
-Sigma      & 0.2560 & (à remplir) \\
-           & (0.0781) & (à remplir) \\[6pt]
-Rho        & 0.9669 & (à remplir) \\
-           & (0.0204) & (à remplir) \\
+$FP$ & $0.024^{*}$ & $0.023^{*}$&  $0.024^{*}$ & $0.025^{**}$ \\
+          & $(0.013)$ & $(0.012)$ & $(0.013)$ & $(0.013)$ \\[6pt]
+$\ln(Y)$ & $1.89^{***}$ & $1.25^{***}$ & $1.27^{***}$ & $1.27^{***}$ \\
+           & $(0.45)$ & $(0.15)$ & $(0.13)$ & $(0.22)$ \\[6pt]
+$\ln(PL)$ & $-0.17$ & $-0.28$ & $-0.36$ & $-0.40$ \\
+           & $(0.54)$ & $(0.29)$ & $(0.31)$& $(0.31)$ \\[6pt]
+$0.5 \ln(Y)^2$ & $-0.09^{***}$ & $-0.06^{***}$ & $-0.07^{***}$ & $-0.07^{***}$ \\
+           & $(0.03)$ & $(0.01)$ & $(0.01)$ & $(0.01)$ \\[6pt]
+$0.5 \ln(PL)^2$ & $0.37^{***}$ & $0.29^{***}$ & $0.30^{***}$ & $0.29^{***}$ \\
+           & $(0.12)$ & $(0.07)$ & $(0.08)$ & $(0.07)$ \\[6pt]
+$\ln(Y)\ln(PL)$ & $-0.05$ & $-0.03$ & $-0.03$& $-0.02$ \\
+           & $(0.03)$ & $(0.02)$& $(0.02)$ & $(0.02)$ \\[6pt]
+$t$ & $0.007^{***}$ & $0.005^{***}$ & $0.005^{***}$ & $0.005^{***}$ \\
+           & $(0.001)$ & $(0.001)$ & $(0.001)$ & $(0.001)$ \\[6pt]
+Constant & $-7.30^{**}$ & $-9.92^{***}$ & $-9.92^{***}$ & $-9.93^{***}$ \\
+           & $(3.41)$ & $(1.29)$ & $(1.06)$ & $(1.58)$ \\[6pt]
+$\text{Corr}(\varepsilon, \eta)$ &  &  $0.99^{***}$ & $0.99^{***}$ & $0.99^{***}$ \\
+           &  & $(0.002)$ & $(0.002)$ & $(0.002)$ \\[6pt]
 \midrule
-\textbf{Log-vraisemblance} & -201.5419 & (à remplir) \\
-\textbf{Itérations} & 928 & (à remplir) \\
+\textbf{Log-Likelihood} &  & $-290.3$ & $-289.5$ & $-288.1$ \\
+\textbf{Iterations} & & 1167 & 1271 & 814 \\
 \bottomrule
 \end{tabular}
 \end{table}
+

@@ -26,3 +26,9 @@ data <- as.data.frame(read_excel(file_path, sheet = 1)) %>%
 
 
 saveRDS(data, "INTERMEDIATE/transports.rds")
+
+compare <- data %>% group_by(TRANS) %>%
+  summarize(mean(INCENT))
+
+compare <- data %>% group_by(KEOLIS) %>%
+  summarize(mean(INCENT))

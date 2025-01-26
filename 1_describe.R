@@ -73,24 +73,3 @@ table_latex <- describe %>%
 cat(table_latex)
 # Afficher la table LaTeX
 writeLines(table_latex, "OUTPUT/reg_des1.tex")
-
-
-#### Descriptive Graphs
-
-# Histogramme pour la variable `COSTS`
-ggplot(data, aes(x = COSTS)) +
-    geom_histogram(binwidth = 1000, fill = "#476682", color = "white") +
-    theme_minimal() +
-    labs(title = "Distribution des coûts", x = "COSTS", y = "Fréquence")
-
-# Boxplot pour visualiser les coûts par type de contrat
-ggplot(data, aes(x = as.factor(INCENT), y = COSTS)) +
-    geom_boxplot(fill = "#56ddb7") +
-    theme_minimal() +
-    labs(title = "Coûts par type de contrat", x = "INCENT (0: Non, 1: Oui)", y = "COSTS")
-
-# Boxplot pour visualiser les coûts par type de contrat
-ggplot(data, aes(x = as.factor(RIGHT), y = COSTS)) +
-    geom_boxplot(fill = "#4568a0") +
-    theme_minimal() +
-    labs(title = "Coûts par idéologie politique", x = "RIGHT = 1, LEFT = 0", y = "COSTS")
